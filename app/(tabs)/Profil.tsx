@@ -1,134 +1,34 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
-import { MaterialIcons } from '@expo/vector-icons';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { Colors } from '@/constants/Colors';
 
 export default function Profil() {
-  const params = useLocalSearchParams();
-  const { 
-    firstName = "Non défini", 
-    lastName = "Non défini", 
-    workNumber = "Non défini", 
-    workLocation = "Non défini", 
-    phone = "Non défini", 
-    email = "Non définie" 
-  } = params || {};
-  
+  const router = useRouter();
+
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView style={styles.scrollView}>
-        <View style={styles.container}>
-          <View style={styles.header}>
-            <MaterialIcons name="person" size={80} color="#344955" />
-            <Text style={styles.title}>Votre Profil</Text>
-          </View>
-          
-          <View style={styles.card}>
-            <View style={styles.infoRow}>
-              <MaterialIcons name="person" size={24} color="#344955" />
-              <View style={styles.infoContainer}>
-                <Text style={styles.infoLabel}>Prénom</Text>
-                <Text style={styles.infoValue}>{firstName}</Text>
-              </View>
-            </View>
-            
-            <View style={styles.infoRow}>
-              <MaterialIcons name="person" size={24} color="#344955" />
-              <View style={styles.infoContainer}>
-                <Text style={styles.infoLabel}>Nom</Text>
-                <Text style={styles.infoValue}>{lastName}</Text>
-              </View>
-            </View>
-            
-            <View style={styles.infoRow}>
-              <MaterialIcons name="work" size={24} color="#344955" />
-              <View style={styles.infoContainer}>
-                <Text style={styles.infoLabel}>Numéro de travail</Text>
-                <Text style={styles.infoValue}>{workNumber}</Text>
-              </View>
-            </View>
-            
-            <View style={styles.infoRow}>
-              <MaterialIcons name="location-on" size={24} color="#344955" />
-              <View style={styles.infoContainer}>
-                <Text style={styles.infoLabel}>Lieu de travail</Text>
-                <Text style={styles.infoValue}>{workLocation}</Text>
-              </View>
-            </View>
-            
-            <View style={styles.infoRow}>
-              <MaterialIcons name="phone" size={24} color="#344955" />
-              <View style={styles.infoContainer}>
-                <Text style={styles.infoLabel}>Numéro de téléphone</Text>
-                <Text style={styles.infoValue}>{phone}</Text>
-              </View>
-            </View>
-            
-            <View style={styles.infoRow}>
-              <MaterialIcons name="email" size={24} color="#344955" />
-              <View style={styles.infoContainer}>
-                <Text style={styles.infoLabel}>Email</Text>
-                <Text style={styles.infoValue}>{email}</Text>
-              </View>
-            </View>
-          </View>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <View style={styles.container}>
+      <View style={styles.card}>
+        <Ionicons name="person" size={60} color={Colors.light.tint} style={styles.icon} />
+        <Text style={styles.title}>Mon Profil</Text>
+        <Text style={styles.subtitle}>
+          Bienvenue sur votre espace personnel. Ici, vous pouvez gérer vos informations et vos préférences.
+        </Text>
+        <TouchableOpacity style={styles.button} onPress={() => router.push('/Signup')}>
+          <Text style={styles.buttonText}>Modifier le Profil</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#f5f5f5'
-  },
-  scrollView: {
-    flex: 1
-  },
-  container: {
-    flex: 1,
-    padding: 16,
-  },
-  header: {
-    alignItems: 'center',
-    marginVertical: 30
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#344955',
-    marginTop: 10
-  },
-  card: {
-    backgroundColor: 'white',
-    borderRadius: 10,
-    padding: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  infoRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
-  infoContainer: {
-    marginLeft: 15,
-    flex: 1
-  },
-  infoLabel: {
-    fontSize: 14,
-    color: '#777',
-  },
-  infoValue: {
-    fontSize: 18,
-    fontWeight: '500',
-    color: '#333',
-    marginTop: 2
-  }
+  container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#ff7e5f' },
+  card: { backgroundColor: 'rgba(255, 255, 255, 0.95)', width: '90%', maxWidth: 400, borderRadius: 24, padding: 35, alignItems: 'center', shadowColor: '#000', shadowOpacity: 0.3, shadowOffset: { width: 0, height: 4 }, shadowRadius: 15, elevation: 10 },
+  icon: { marginBottom: 20 },
+  title: { fontSize: 32, fontWeight: '900', color: Colors.light.tint, textAlign: 'center', marginBottom: 20 },
+  subtitle: { fontSize: 18, lineHeight: 26, color: '#444', textAlign: 'center', marginBottom: 30 },
+  button: { backgroundColor: Colors.light.tint, paddingVertical: 16, paddingHorizontal: 40, borderRadius: 50, alignItems: 'center' },
+  buttonText: { color: '#fff', fontSize: 18, fontWeight: 'bold' },
 });

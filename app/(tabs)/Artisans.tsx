@@ -1,61 +1,34 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { Colors } from '@/constants/Colors';
 
 export default function Artisans() {
+  const router = useRouter();
+
   return (
-    <View style={styles.otherScreens}>
-      <Text style={styles.screenTitle}>Artisans Disponibles</Text>
-      <ScrollView style={styles.scrollView}>
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Esdras Bakayoko</Text>
-          <Text style={styles.cardDescription}>Plombier certifié avec 10 ans d'expérience, disponible pour tous vos travaux.</Text>
-        </View>
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Orthense Kouassi</Text>
-          <Text style={styles.cardDescription}>Couturière professionnelle, spécialisée dans les vêtements sur mesure.</Text>
-        </View>
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Franck Seka</Text>
-          <Text style={styles.cardDescription}>Menuisier passionné, créant des meubles uniques en bois recyclé.</Text>
-        </View>
-      </ScrollView>
+    <View style={styles.container}>
+      <View style={styles.card}>
+        <Ionicons name="person" size={60} color={Colors.light.tint} style={styles.icon} />
+        <Text style={styles.title}>Mon Profil</Text>
+        <Text style={styles.subtitle}>
+          Bienvenue sur votre espace personnel. Ici, vous pouvez gérer vos informations et vos préférences.
+        </Text>
+        <TouchableOpacity style={styles.button} onPress={() => router.push('/Signup')}>
+          <Text style={styles.buttonText}>Modifier le Profil</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  otherScreens: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#4A6572',
-  },
-  screenTitle: {
-    fontSize: 28,
-    color: 'white',
-    marginBottom: 20,
-  },
-  scrollView: {
-    width: '90%',
-    padding: 10,
-  },
-  card: {
-    backgroundColor: '#fff',
-    padding: 15,
-    marginBottom: 15,
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 4,
-  },
-  cardTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  cardDescription: {
-    fontSize: 16,
-    marginTop: 10,
-    color: '#555',
-  }
+  container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#ff7e5f' },
+  card: { backgroundColor: 'rgba(255, 255, 255, 0.95)', width: '90%', maxWidth: 400, borderRadius: 24, padding: 35, alignItems: 'center', shadowColor: '#000', shadowOpacity: 0.3, shadowOffset: { width: 0, height: 4 }, shadowRadius: 15, elevation: 10 },
+  icon: { marginBottom: 20 },
+  title: { fontSize: 32, fontWeight: '900', color: Colors.light.tint, textAlign: 'center', marginBottom: 20 },
+  subtitle: { fontSize: 18, lineHeight: 26, color: '#444', textAlign: 'center', marginBottom: 30 },
+  button: { backgroundColor: Colors.light.tint, paddingVertical: 16, paddingHorizontal: 40, borderRadius: 50, alignItems: 'center' },
+  buttonText: { color: '#fff', fontSize: 18, fontWeight: 'bold' },
 });
