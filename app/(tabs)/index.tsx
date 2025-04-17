@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Animated, Easing, Dimensions, Alert, ImageBackground, StatusBar, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Animated, Easing, Dimensions, Alert, ImageBackground, StatusBar, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
+import { BlurView } from 'expo-blur';
 
 const { width, height } = Dimensions.get('window');
 
@@ -46,7 +47,7 @@ export default function Index() {
     }
   }, [introCompleted]);
 
-  // Animation d'introduction sérieuse
+  // Animation d'introduction
   useEffect(() => {
     // Séquence d'animation d'introduction
     const runIntroAnimation = () => {
@@ -146,9 +147,9 @@ export default function Index() {
         barStyle="light-content" 
       />
       
-      {/* Image d'arrière-plan */}
+      {/* Image d'arrière-plan améliorée */}
       <ImageBackground
-        source={{ uri: 'https://images.unsplash.com/photo-1562654501-a0ccc0fc3fb1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80' }}
+        source={{ uri: 'https://images.unsplash.com/photo-1517971053567-8bde93bc6a58?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=85' }}
         style={styles.backgroundImage}
         resizeMode="cover"
       >
@@ -193,96 +194,114 @@ export default function Index() {
             ))}
           </View>
 
-          {/* Animation du logo et du marteau */}
-          <Animated.View
-            style={[
-              styles.iconContainer,
-              { opacity: fadeAnim, transform: [{ translateY: slideUpAnim }] },
-            ]}
-          >
-            <Animated.View style={hammerTransform}>
-              <MaterialCommunityIcons name="hammer" size={60} color="#FFD700" />
-            </Animated.View>
+          {/* Carte principale avec effet de verre */}
+          <Animated.View style={[
+            styles.mainCard,
+            { 
+              opacity: fadeAnim, 
+              transform: [{ translateY: slideUpAnim }] 
+            }
+          ]}>
+            {Platform.OS === 'ios' ? (
+              <BlurView intensity={40} tint="dark" style={styles.blurContainer}>
+                <View style={styles.cardContent}>
+                  {/* Logo et animation du marteau */}
+                  <View style={styles.logoBadge}>
+                    <Animated.View style={hammerTransform}>
+                      <MaterialCommunityIcons name="hammer" size={40} color="#FFD700" />
+                    </Animated.View>
+                  </View>
+                  
+                  <Text style={styles.title}>
+                    ArtisCo
+                  </Text>
+                  
+                  <Text style={styles.subtitle}>
+                    Soutenez les artisans de votre région et trouvez facilement le service dont vous avez besoin
+                  </Text>
+                </View>
+              </BlurView>
+            ) : (
+              <View style={[styles.blurContainer, styles.androidBlur]}>
+                <View style={styles.cardContent}>
+                  {/* Logo et animation du marteau */}
+                  <View style={styles.logoBadge}>
+                    <Animated.View style={hammerTransform}>
+                      <MaterialCommunityIcons name="hammer" size={40} color="#FFD700" />
+                    </Animated.View>
+                  </View>
+                  
+                  <Text style={styles.title}>
+                    ArtisCo
+                  </Text>
+                  
+                  <Text style={styles.subtitle}>
+                    Soutenez les artisans de votre région et trouvez facilement le service dont vous avez besoin
+                  </Text>
+                </View>
+              </View>
+            )}
           </Animated.View>
 
-          {/* Titre avec animation */}
-          <Animated.Text
-            style={[
-              styles.title,
-              {
-                opacity: fadeAnim,
-                transform: [{ translateY: slideUpAnim }],
-              },
-            ]}
-          >
-            Bienvenue sur ArtisCo
-          </Animated.Text>
-
-          {/* Sous-titre avec animation */}
-          <Animated.Text
-            style={[
-              styles.subtitle,
-              {
-                opacity: fadeAnim,
-                transform: [{ translateY: slideUpAnim }],
-              },
-            ]}
-          >
-            Soutenez les artisans de votre région et trouvez facilement le service dont vous avez besoin
-          </Animated.Text>
-
-          {/* Bouton d'inscription avec animation */}
-          <Animated.View
-            style={{
-              width: '80%',
+          {/* Section des boutons avec nouveau design */}
+          <Animated.View style={[
+            styles.buttonContainer,
+            {
               opacity: fadeAnim,
               transform: [
                 { translateY: slideUpAnim },
                 { scale: buttonScaleAnim },
               ],
-            }}
-          >
+            }
+          ]}>
+            {/* Bouton d'inscription avec icône */}
             <TouchableOpacity
               style={styles.button}
               onPress={() => router.push('./Signup')}
-              activeOpacity={0.7}
+              activeOpacity={0.8}
             >
+              <Ionicons name="person-add-outline" size={22} color="white" style={styles.buttonIcon} />
               <Text style={styles.buttonText}>S'inscrire</Text>
             </TouchableOpacity>
-          </Animated.View>
 
-          {/* Bouton de connexion avec animation */}
-          <Animated.View
-            style={{
-              width: '80%',
-              opacity: fadeAnim,
-              transform: [
-                { translateY: slideUpAnim },
-                { scale: buttonScaleAnim },
-              ],
-            }}
-          >
+            {/* Séparateur élégant */}
+            <View style={styles.orSeparator}>
+              <View style={styles.separatorLine} />
+              <Text style={styles.separatorText}>ou</Text>
+              <View style={styles.separatorLine} />
+            </View>
+
+            {/* Bouton de connexion avec icône */}
             <TouchableOpacity
               style={[styles.button, styles.loginButton]}
               onPress={() => router.push('./Login')}
-              activeOpacity={0.7}
+              activeOpacity={0.8}
             >
+              <Ionicons name="log-in-outline" size={22} color="white" style={styles.buttonIcon} />
               <Text style={styles.buttonText}>Se connecter</Text>
             </TouchableOpacity>
           </Animated.View>
 
-          {/* Icône d'information avec effet pulse */}
+          {/* Footer avec informations et mentions légales */}
           <Animated.View
             style={[
-              styles.infoIcon,
+              styles.footer,
               {
                 opacity: fadeAnim,
                 transform: [{ translateY: slideUpAnim }],
               },
             ]}
           >
-            <TouchableOpacity onPress={showAboutPreview}>
-              <MaterialCommunityIcons name="information" size={30} color="white" />
+            <TouchableOpacity onPress={showAboutPreview} style={styles.footerButton}>
+              <Ionicons name="information-circle-outline" size={22} color="white" />
+              <Text style={styles.footerText}>À propos</Text>
+            </TouchableOpacity>
+            
+            <View style={styles.footerDivider} />
+            
+            <TouchableOpacity onPress={() => router.push('./legal')} style={styles.footerButton}>
+              <Ionicons name="document-text-outline" size={22} color="white" />
+              <Text style={styles.footerText}>Mentions légales</Text>
             </TouchableOpacity>
           </Animated.View>
         </View>
@@ -306,9 +325,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.7)', // Overlay semi-transparent sur l'image
-    paddingTop: 0, // S'assurer qu'il n'y a pas de padding supplémentaire en haut
-    paddingBottom: 0, // S'assurer qu'il n'y a pas de padding supplémentaire en bas
+    backgroundColor: 'rgba(0,0,0,0.6)', // Overlay semi-transparent sur l'image
     paddingHorizontal: 20,
     overflow: 'hidden',
   },
@@ -352,22 +369,55 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: '#FFD700',
   },
-  iconContainer: {
+  // Carte principale avec effet de verre
+  mainCard: {
+    width: '100%',
+    maxWidth: 450,
     marginBottom: 30,
-    padding: 18,
-    borderRadius: 60,
+    borderRadius: 16,
+    overflow: 'hidden',
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  blurContainer: {
+    width: '100%',
+    overflow: 'hidden',
+    borderRadius: 16,
+  },
+  androidBlur: {
+    backgroundColor: 'rgba(30, 30, 30, 0.85)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+  },
+  cardContent: {
+    padding: 25,
+    alignItems: 'center',
+  },
+  logoBadge: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    elevation: 10,
-    shadowColor: '#FFD700',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+    borderWidth: 2,
+    borderColor: 'rgba(255, 215, 0, 0.7)',
+    shadowColor: "#FFD700",
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.5,
-    shadowRadius: 15,
+    shadowRadius: 10,
+    elevation: 8,
   },
   title: {
-    fontSize: 30,
+    fontSize: 32,
     fontWeight: 'bold',
     color: '#FFD700',
     marginBottom: 15,
+    textAlign: 'center',
     textShadowColor: 'rgba(255,215,0,0.5)',
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 10,
@@ -377,45 +427,91 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'white',
     textAlign: 'center',
-    marginBottom: 40,
-    paddingHorizontal: 10,
     lineHeight: 22,
     fontWeight: '300',
+    marginBottom: 5,
+  },
+  // Container pour les boutons
+  buttonContainer: {
+    width: '100%',
+    maxWidth: 450,
+    marginBottom: 40,
+    backgroundColor: 'rgba(20, 20, 20, 0.8)',
+    borderRadius: 16,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
   },
   button: {
     width: '100%',
-    padding: 18,
+    padding: 16,
     borderRadius: 12,
+    flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#0000FF', // Bleu pur pour le bouton S'inscrire
-    marginBottom: 20,
+    justifyContent: 'center',
+    backgroundColor: '#4361EE', // Bleu moderne
+    marginBottom: 10,
     elevation: 8,
-    shadowColor: '#0000FF',
-    shadowOffset: { width: 0, height: 0 },
+    shadowColor: '#4361EE',
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 10,
   },
+  buttonIcon: {
+    marginRight: 10,
+  },
   buttonText: {
     color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 17,
+    fontWeight: '600',
     letterSpacing: 0.8,
   },
   loginButton: {
-    backgroundColor: 'green',
-    shadowColor: '#28A745',
+    backgroundColor: '#10B981', // Vert moderne
+    shadowColor: '#10B981',
   },
-  infoIcon: {
+  // Séparateur "ou"
+  orSeparator: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 15,
+  },
+  separatorLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+  },
+  separatorText: {
+    color: 'rgba(255, 255, 255, 0.7)',
+    paddingHorizontal: 15,
+    fontSize: 14,
+  },
+  // Footer
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     position: 'absolute',
-    bottom: 30,
-    left: 20,
-    backgroundColor: 'rgba(0,0,0,0.7)',
-    borderRadius: 50,
-    padding: 12,
-    elevation: 5,
-    shadowColor: 'white',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
+    bottom: 40,
+    width: '100%',
+    paddingHorizontal: 20,
+  },
+  footerButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 8,
+  },
+  footerText: {
+    color: 'white',
+    marginLeft: 6,
+    fontSize: 14,
+    fontWeight: '300',
+  },
+  footerDivider: {
+    height: 15,
+    width: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    marginHorizontal: 15,
   },
 });

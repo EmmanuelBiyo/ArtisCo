@@ -52,7 +52,7 @@ const mockArtisans = [
   { id: '27', name: 'Soro Ibrahim', job: 'Électros', rating: 4.5, distance: 2.4, locality: 'Yopougon', class: 'Confirmé', experience: '8 ans', description: 'Circuits.', contact: 'soro.ibrahim@artisco.ci', phone: '+22501234593', whatsapp: '+22501234593', projects: '60 projets', certifications: 'BEP Électricité' },
   { id: '28', name: 'Coulibaly Karim', job: 'Électros', rating: 4.2, distance: 3.1, locality: 'Treichville', class: 'Artisan', experience: '5 ans', description: 'Éclairage.', contact: 'coulibaly.karim@artisco.ci', phone: '+22501234594', whatsapp: '+22501234594', projects: '45 projets', certifications: 'Formation pratique' },
   { id: '29', name: 'Diarra Modibo', job: 'Électros', rating: 4.9, distance: 1.8, locality: 'Abobo', class: 'Maître', experience: '20 ans', description: 'Solaire.', contact: 'diarra.modibo@artisco.ci', phone: '+22501234595', whatsapp: '+22501234595', projects: '220 projets', certifications: 'Maîtrise électricité' },
-  { id: '30', name: 'Bah Ousmane', job: 'Électros', rating: 4.6, distance: 2.6, locality: 'Adjamé', class: 'Confirmé', experience: '10 ans', description: 'Domotique.', contact: 'bah.ousmane@artisco.ci', phone: '+22501234596', whatsapp: '+22501234596', projects: '90 projets', certifications: 'CAP Électricité' },
+  { id: '30', name: 'Bah Ousmane', job: 'Électros', rating: '4.6', distance: 2.6, locality: 'Adjamé', class: 'Confirmé', experience: '10 ans', description: 'Domotique.', contact: 'bah.ousmane@artisco.ci', phone: '+22501234596', whatsapp: '+22501234596', projects: '90 projets', certifications: 'CAP Électricité' },
   // Peinture
   { id: '31', name: 'Kouadio Alain', job: 'Peinture', rating: 4.3, distance: 3.0, locality: 'Plateau', class: 'Expert', experience: '12 ans', description: 'Intérieur.', contact: 'kouadio.alain@artisco.ci', phone: '+22501234597', whatsapp: '+22501234597', projects: '90 projets', certifications: 'CAP Peinture' },
   { id: '32', name: 'N’Zué Félix', job: 'Peinture', rating: 4.1, distance: 2.5, locality: 'Koumassi', class: 'Confirmé', experience: '7 ans', description: 'Décorative.', contact: 'nzue.felix@artisco.ci', phone: '+22501234598', whatsapp: '+22501234598', projects: '50 projets', certifications: 'BEP Peinture' },
@@ -61,7 +61,7 @@ const mockArtisans = [
   { id: '35', name: 'Yéo Drissa', job: 'Peinture', rating: 4.4, distance: 2.8, locality: 'Yopougon', class: 'Confirmé', experience: '9 ans', description: 'Effets spéciaux.', contact: 'yeo.drissa@artisco.ci', phone: '+22501234601', whatsapp: '+22501234601', projects: '70 projets', certifications: 'CAP Peinture' },
   // Bricolage
   { id: '36', name: 'Moussa Bah', job: 'Bricolage', rating: 4.1, distance: 2.9, locality: 'Treichville', class: 'Expert', experience: '11 ans', description: 'Montage.', contact: 'moussa.bah@artisco.ci', phone: '+22501234602', whatsapp: '+22501234602', projects: '110 projets', certifications: 'CAP Bricolage' },
-  { id: '37', name: 'Kouamé Jules', job: 'Bricolage', rating: 3.8, distance: 3.4, locality: 'Abobo', class: 'Confirmé', experience: '6 ans', description: 'Réparations.', contact: 'kouame.jules@artisco.ci', phone: '+22501234603', whatsapp: '+22501234603', projects: '55 projets', certifications: 'Formation artisanale' },
+  { id: '37', name: 'Kouamé Jules', job: 'Bricolage', rating: 3.8, distance: 3.4, locality: 'Abobo', class: 'Confirmé', experience: '6 ans', description: 'Réparations.', contact: 'kouame.jules@artisco.ci', phone: '+22501234603', whatsapp: '+22501234503', projects: '55 projets', certifications: 'Formation artisanale' },
   { id: '38', name: 'Traoré Amadou', job: 'Bricolage', rating: 4.0, distance: 2.7, locality: 'Adjamé', class: 'Artisan', experience: '4 ans', description: 'Rideaux.', contact: 'traore.amadou@artisco.ci', phone: '+22501234604', whatsapp: '+22501234604', projects: '30 projets', certifications: 'Formation pratique' },
   { id: '39', name: 'Soro Lacina', job: 'Bricolage', rating: 4.5, distance: 1.9, locality: 'Plateau', class: 'Maître', experience: '14 ans', description: 'Polyvalent.', contact: 'soro.lacina@artisco.ci', phone: '+22501234605', whatsapp: '+22501234605', projects: '130 projets', certifications: 'Maîtrise artisanale' },
   { id: '40', name: 'Ouédraogo Idrissa', job: 'Bricolage', rating: 4.3, distance: 3.1, locality: 'Koumassi', class: 'Confirmé', experience: '8 ans', description: 'Aménagement.', contact: 'ouedraogo.idrissa@artisco.ci', phone: '+22501234606', whatsapp: '+22501234606', projects: '75 projets', certifications: 'CAP Bricolage' },
@@ -136,9 +136,15 @@ export default function Home() {
   const [filteredArtisans, setFilteredArtisans] = useState([]);
   const [selectedArtisan, setSelectedArtisan] = useState(null);
   const [isSearchActive, setIsSearchActive] = useState(false);
+  const [voiceFeedback, setVoiceFeedback] = useState('');
+  const [isVoiceModalVisible, setIsVoiceModalVisible] = useState(false);
+  const [voiceStatus, setVoiceStatus] = useState('Parlez maintenant');
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const cardsAnim = useRef(new Animated.Value(50)).current;
   const modalAnim = useRef(new Animated.Value(0)).current;
+  const waveAnim1 = useRef(new Animated.Value(0.5)).current;
+  const waveAnim2 = useRef(new Animated.Value(0.5)).current;
+  const waveAnim3 = useRef(new Animated.Value(0.5)).current;
 
   // Animation d’apparition
   useEffect(() => {
@@ -157,6 +163,83 @@ export default function Home() {
     ]).start();
   }, []);
 
+  // Animation des ondes sonores
+  const startWaveAnimation = () => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(waveAnim1, {
+          toValue: 1,
+          duration: 500,
+          useNativeDriver: true,
+        }),
+        Animated.timing(waveAnim1, {
+          toValue: 0.5,
+          duration: 500,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(waveAnim2, {
+          toValue: 1,
+          duration: 500,
+          delay: 200,
+          useNativeDriver: true,
+        }),
+        Animated.timing(waveAnim2, {
+          toValue: 0.5,
+          duration: 500,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(waveAnim3, {
+          toValue: 1,
+          duration: 500,
+          delay: 400,
+          useNativeDriver: true,
+        }),
+        Animated.timing(waveAnim3, {
+          toValue: 0.5,
+          duration: 500,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  };
+
+  // Liste de recherches vocales simulées
+  const simulatedVoiceQueries = [
+    'Menuisier',
+    'Couture',
+    'Plomberie',
+    'Koffi Jean',
+    'Marie Kouakou',
+  ];
+
+  // Simuler une recherche vocale
+  const simulateVoiceSearch = () => {
+    setIsVoiceModalVisible(true);
+    setVoiceStatus('Parlez maintenant');
+    startWaveAnimation();
+
+    // Simuler l'écoute pendant 3 secondes
+    setTimeout(() => {
+      setVoiceStatus('Écoute terminée avec succès');
+      const randomQuery = simulatedVoiceQueries[Math.floor(Math.random() * simulatedVoiceQueries.length)];
+      setSearchQuery(randomQuery);
+      handleSearch(randomQuery);
+
+      // Fermer la modale après 1 seconde supplémentaire
+      setTimeout(() => {
+        setIsVoiceModalVisible(false);
+      }, 1000);
+    }, 3000);
+  };
+
   // Gérer la recherche et les suggestions
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -174,10 +257,18 @@ export default function Home() {
       );
       filtered.sort((a, b) => a.distance - b.distance);
       setFilteredArtisans(filtered);
+
+      // Simuler un retour vocal (texte affiché)
+      setVoiceFeedback(
+        filtered.length > 0
+          ? `J'ai trouvé ${filtered.length} artisans pour ${query}.`
+          : `Aucun artisan trouvé pour ${query}.`
+      );
     } else {
       setSuggestions([]);
       setFilteredArtisans([]);
       setIsSearchActive(false);
+      setVoiceFeedback('');
     }
   };
 
@@ -190,6 +281,7 @@ export default function Home() {
     filtered.sort((a, b) => a.distance - b.distance);
     setFilteredArtisans(filtered);
     setIsSearchActive(true);
+    setVoiceFeedback(`J'ai trouvé ${filtered.length} artisans pour ${suggestion}.`);
   };
 
   // Sélectionner une catégorie
@@ -201,6 +293,7 @@ export default function Home() {
     filtered.sort((a, b) => a.distance - b.distance);
     setFilteredArtisans(filtered);
     setIsSearchActive(true);
+    setVoiceFeedback(`J'ai trouvé ${filtered.length} artisans pour ${category}.`);
   };
 
   // Ouvrir la modale
@@ -243,6 +336,7 @@ export default function Home() {
     setSuggestions([]);
     setSelectedCategory(null);
     setFilteredArtisans([]);
+    setVoiceFeedback('');
   };
 
   // Rendu pour une section
@@ -435,13 +529,84 @@ export default function Home() {
             value={searchQuery}
             onChangeText={handleSearch}
           />
-          {searchQuery.length > 0 && (
+          {searchQuery.length > 0 ? (
             <TouchableOpacity onPress={resetSearch}>
               <Ionicons name="close-circle" size={20} color="#6B7280" />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity onPress={simulateVoiceSearch}>
+              <Ionicons name="mic" size={24} color="#6B7280" />
             </TouchableOpacity>
           )}
         </View>
       </View>
+
+      {/* Modale de simulation vocale */}
+      <Modal
+        transparent={true}
+        visible={isVoiceModalVisible}
+        animationType="fade"
+      >
+        <View style={styles.voiceModalContainer}>
+          <View style={styles.voiceModalContent}>
+            <View style={styles.waveContainer}>
+              <Animated.View
+                style={[
+                  styles.waveBar,
+                  {
+                    transform: [
+                      {
+                        scaleY: waveAnim1.interpolate({
+                          inputRange: [0.5, 1],
+                          outputRange: [0.5, 1.5],
+                        }),
+                      },
+                    ],
+                  },
+                ]}
+              />
+              <Animated.View
+                style={[
+                  styles.waveBar,
+                  {
+                    transform: [
+                      {
+                        scaleY: waveAnim2.interpolate({
+                          inputRange: [0.5, 1],
+                          outputRange: [0.5, 2],
+                        }),
+                      },
+                    ],
+                  },
+                ]}
+              />
+              <Animated.View
+                style={[
+                  styles.waveBar,
+                  {
+                    transform: [
+                      {
+                        scaleY: waveAnim3.interpolate({
+                          inputRange: [0.5, 1],
+                          outputRange: [0.5, 1.5],
+                        }),
+                      },
+                    ],
+                  },
+                ]}
+              />
+            </View>
+            <Text style={styles.voiceModalText}>{voiceStatus}</Text>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Retour vocal simulé */}
+      {voiceFeedback.length > 0 && (
+        <View style={styles.voiceFeedbackContainer}>
+          <Text style={styles.voiceFeedbackText}>{voiceFeedback}</Text>
+        </View>
+      )}
 
       {/* Suggestions */}
       {suggestions.length > 0 && (
@@ -525,7 +690,7 @@ export default function Home() {
         </ScrollView>
       )}
 
-      {/* Modale */}
+      {/* Modale artisan */}
       {selectedArtisan && (
         <Modal transparent={true} visible={!!selectedArtisan} animationType="none">
           <Animated.View
@@ -691,6 +856,50 @@ const styles = StyleSheet.create({
     color: '#1A3C34',
     fontWeight: '500',
   },
+  voiceModalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+  },
+  voiceModalContent: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 15,
+    padding: 20,
+    alignItems: 'center',
+    width: '80%',
+    maxWidth: 300,
+  },
+  waveContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  waveBar: {
+    width: 10,
+    height: 40,
+    backgroundColor: '#1A3C34',
+    marginHorizontal: 5,
+    borderRadius: 5,
+  },
+  voiceModalText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#1A3C34',
+  },
+  voiceFeedbackContainer: {
+    backgroundColor: '#E5E7EB',
+    marginHorizontal: 16,
+    marginTop: 10,
+    padding: 10,
+    borderRadius: 8,
+  },
+  voiceFeedbackText: {
+    fontSize: 14,
+    color: '#1A3C34',
+    textAlign: 'center',
+  },
   suggestionsContainer: {
     backgroundColor: '#FFFFFF',
     borderRadius: 10,
@@ -716,7 +925,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   homeContent: {
-    paddingBottom: 0, // Plein écran
+    paddingBottom: 0,
   },
   promotionBanner: {
     backgroundColor: '#FFD700',
@@ -912,7 +1121,7 @@ const styles = StyleSheet.create({
   searchResultsList: {
     paddingHorizontal: 16,
     paddingVertical: 10,
-    paddingBottom: 0, // Plein écran
+    paddingBottom: 0,
   },
   searchArtisanCard: {
     backgroundColor: '#FFFFFF',
