@@ -1,4 +1,3 @@
-// AuthContext.tsx
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 
 // Définir les types
