@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert, ScrollView, KeyboardAvoidingView, Platform, Modal, FlatList } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from './(tabs)/context/AuthContext';
@@ -19,22 +19,6 @@ export default function Signup() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [showMonthModal, setShowMonthModal] = useState(false);
-
-  const months = [
-    { value: '01', label: 'Janvier' },
-    { value: '02', label: 'Février' },
-    { value: '03', label: 'Mars' },
-    { value: '04', label: 'Avril' },
-    { value: '05', label: 'Mai' },
-    { value: '06', label: 'Juin' },
-    { value: '07', label: 'Juillet' },
-    { value: '08', label: 'Août' },
-    { value: '09', label: 'Septembre' },
-    { value: '10', label: 'Octobre' },
-    { value: '11', label: 'Novembre' },
-    { value: '12', label: 'Décembre' }
-  ];
 
   const handleSignup = () => {
     // Validation plus robuste des champs
@@ -111,11 +95,6 @@ export default function Signup() {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
-  const selectMonth = (value, label) => {
-    setBirthMonth(value);
-    setShowMonthModal(false);
-  };
-
   const renderInputField = (icon, placeholder, value, setValue, options = {}) => (
     <View style={styles.inputContainer}>
       <Ionicons name={icon} size={20} color="#6366f1" style={styles.icon} />
@@ -139,12 +118,6 @@ export default function Signup() {
     </View>
   );
 
-  // Trouver le nom du mois correspondant à sa valeur
-  const getMonthLabel = () => {
-    const selectedMonth = months.find(month => month.value === birthMonth);
-    return selectedMonth ? selectedMonth.label : '';
-  };
-
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -162,7 +135,7 @@ export default function Signup() {
           {renderInputField("person-outline", "Prénom", firstName, setFirstName, { autoCapitalize: "words" })}
           {renderInputField("person-outline", "Nom", lastName, setLastName, { autoCapitalize: "words" })}
           
-          {/* Date de naissance avec sélection du mois */}
+          {/* Date de naissance avec saisie directe des chiffres */}
           <View style={styles.dateContainer}>
             <View style={[styles.dateInputContainer, { flex: 1, marginRight: 5 }]}>
               <Ionicons name="calendar-outline" size={20} color="#6366f1" style={styles.icon} />
@@ -176,15 +149,17 @@ export default function Signup() {
                 placeholderTextColor="#9ca3af"
               />
             </View>
-            <TouchableOpacity 
-              style={[styles.dateInputContainer, { flex: 1.5, marginHorizontal: 5 }]} 
-              onPress={() => setShowMonthModal(true)}
-            >
-              <Text style={[styles.dateInput, !birthMonth && { color: '#9ca3af' }]}>
-                {birthMonth ? getMonthLabel() : 'Mois'}
-              </Text>
-              <Ionicons name="chevron-down" size={16} color="#6366f1" />
-            </TouchableOpacity>
+            <View style={[styles.dateInputContainer, { flex: 1, marginHorizontal: 5 }]}>
+              <TextInput
+                style={styles.dateInput}
+                placeholder="Mois"
+                value={birthMonth}
+                onChangeText={setBirthMonth}
+                keyboardType="number-pad"
+                maxLength={2}
+                placeholderTextColor="#9ca3af"
+              />
+            </View>
             <View style={[styles.dateInputContainer, { flex: 1, marginLeft: 5 }]}>
               <TextInput
                 style={styles.dateInput}
@@ -260,38 +235,6 @@ export default function Signup() {
 
         <View style={styles.footer} />
       </ScrollView>
-
-      {/* Modal pour la sélection du mois */}
-      <Modal
-        visible={showMonthModal}
-        transparent={true}
-        animationType="slide"
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Sélectionnez un mois</Text>
-            <FlatList
-              data={months}
-              keyExtractor={(item) => item.value}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  style={styles.monthItem}
-                  onPress={() => selectMonth(item.value, item.label)}
-                >
-                  <Text style={styles.monthText}>{item.label}</Text>
-                </TouchableOpacity>
-              )}
-              ItemSeparatorComponent={() => <View style={styles.separator} />}
-            />
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setShowMonthModal(false)}
-            >
-              <Text style={styles.closeButtonText}>Annuler</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
     </KeyboardAvoidingView>
   );
 }
@@ -361,7 +304,6 @@ const styles = StyleSheet.create({
     elevation: 2,
     borderWidth: 1,
     borderColor: '#e2e8f0',
-    justifyContent: 'space-between',
   },
   dateInput: {
     flex: 1,
@@ -412,49 +354,5 @@ const styles = StyleSheet.create({
   },
   footer: {
     height: 40,
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-  },
-  modalContent: {
-    backgroundColor: '#fff',
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    paddingVertical: 20,
-    maxHeight: '70%',
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#1e293b',
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  monthItem: {
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-  },
-  monthText: {
-    fontSize: 16,
-    color: '#334155',
-  },
-  separator: {
-    height: 1,
-    backgroundColor: '#e2e8f0',
-  },
-  closeButton: {
-    marginTop: 15,
-    marginHorizontal: 20,
-    paddingVertical: 12,
-    backgroundColor: '#e2e8f0',
-    borderRadius: 12,
-    alignItems: 'center',
-  },
-  closeButtonText: {
-    color: '#334155',
-    fontSize: 16,
-    fontWeight: '600',
   },
 });
