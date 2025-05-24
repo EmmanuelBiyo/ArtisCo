@@ -161,7 +161,7 @@ export default function Profile() {
             // Simuler la déconnexion après animation
             setTimeout(() => {
               Alert.alert('Déconnecté', 'Vous avez été déconnecté avec succès.');
-              // router.replace('/login'); // Redirection vers la page de connexion
+              // router.replace('/(types)/Login'); // Redirection vers la page de connexion
             }, 500);
           } 
         }

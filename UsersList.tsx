@@ -23,7 +23,7 @@ const UsersList: React.FC = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get<User[]>('http://172.20.10.3:3000/users'); // Remplace cette IP par celle de ton PC
+        const response = await axios.get<User[]>('http://192.168.1.117:3000/users'); // Remplace cette IP par celle de ton PC
         setUsers(response.data);
       } catch (error) {
         console.error('Erreur API:', error);
