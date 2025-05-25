@@ -365,7 +365,7 @@ export default function Artisans() {
                       colors={['rgba(250,249,246,0.6)', 'rgba(247,231,206,0.6)']}
                       style={styles.featuredImagePlaceholder}
                     >
-                      <MaterialCommunityIcons name="image-outline" size={40} color={colors.charcoal} />
+                      <MaterialCommunityIcons name="shopping" size={50} color={colors.charcoal} />
                     </LinearGradient>
                     <View style={styles.featuredContent}>
                       <Text style={[styles.featuredName, { color: colors.charcoal }]}>{product.name}</Text>
@@ -572,7 +572,7 @@ export default function Artisans() {
                       colors={['rgba(250,249,246,0.6)', 'rgba(247,231,206,0.6)']}
                       style={styles.productImagePlaceholder}
                     >
-                      <MaterialCommunityIcons name="image-outline" size={30} color={colors.charcoal} />
+                      <MaterialCommunityIcons name="diamond" size={30} color={colors.charcoal} />
                     </LinearGradient>
                     <View style={[styles.productStatusBadge, { backgroundColor: colors.gold + 'E6' }]}>
                       <Text style={styles.productStatusText}>En Stock</Text>
@@ -705,7 +705,7 @@ const styles = StyleSheet.create({
   // Styles pour l'espace client
   clientHeaderSection: {
     alignItems: 'center',
-    marginBottom: 25,
+    marginBottom: 0,
   },
   clientSectionTitle: {
     fontSize: 28,

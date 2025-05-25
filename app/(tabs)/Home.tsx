@@ -1,26 +1,31 @@
 import React, { useEffect, useRef } from 'react';
-import { Text, StyleSheet, Animated, View, Dimensions, ScrollView, TouchableOpacity, TextInput } from 'react-native';
+import { Text, StyleSheet, Animated, View, Dimensions, ScrollView, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import Profil from './Profil';
 import search from './search';
 import Artisans from './Artisans';
+import Chatbot from './Chatbot'; // AJOUT - Assurez-vous que ce fichier existe
 
 // Création du navigateur à onglets
 const Tab = createBottomTabNavigator();
 
 // Composant de l'écran d'accueil
-function HomeScreen() {
+function HomeScreen({ navigation }) { // MODIFICATION - Ajout de { navigation }
   const { width, height } = Dimensions.get('window');
 
-  // Animations
+  // Animations existantes
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const titleAnim = useRef(new Animated.Value(-50)).current;
   const subtitleAnim = useRef(new Animated.Value(-30)).current;
-  const logoAnim = useRef(new Animated.Value(0)).current; // Pour la rotation
+  const logoAnim = useRef(new Animated.Value(0)).current;
   const cardsAnim = useRef(new Animated.Value(100)).current;
-  const bannerPulse = useRef(new Animated.Value(1)).current; // Pour l'effet de pulsation
-  const ctaBounce = useRef(new Animated.Value(1)).current; // Pour l'effet de rebond
+  const bannerPulse = useRef(new Animated.Value(1)).current;
+  const ctaBounce = useRef(new Animated.Value(1)).current;
+  
+  // Animation pour le bouton chatbot
+  const chatbotFloat = useRef(new Animated.Value(0)).current;
+  const chatbotScale = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
     // Animation de pulsation pour la bannière
@@ -55,6 +60,22 @@ function HomeScreen() {
       ])
     );
 
+    // Animation flottante pour le bouton chatbot
+    const floatAnimation = Animated.loop(
+      Animated.sequence([
+        Animated.timing(chatbotFloat, {
+          toValue: -10,
+          duration: 2000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(chatbotFloat, {
+          toValue: 0,
+          duration: 2000,
+          useNativeDriver: true,
+        }),
+      ])
+    );
+
     // Séquence d'animation principale
     Animated.sequence([
       Animated.timing(fadeAnim, {
@@ -75,7 +96,7 @@ function HomeScreen() {
           useNativeDriver: true,
         }),
         Animated.timing(logoAnim, {
-          toValue: 360, // Rotation complète
+          toValue: 360,
           duration: 1500,
           useNativeDriver: true,
         }),
@@ -88,15 +109,37 @@ function HomeScreen() {
       ]),
     ]).start();
 
-    // Lancer les animations de pulsation et de rebond
+    // Lancer les animations
     pulseAnimation.start();
     bounceAnimation.start();
+    floatAnimation.start();
 
     return () => {
       pulseAnimation.stop();
       bounceAnimation.stop();
+      floatAnimation.stop();
     };
   }, []);
+
+  // FONCTION MODIFIÉE pour gérer le clic sur le chatbot
+  const handleChatbotPress = () => {
+    // Animation de feedback tactile
+    Animated.sequence([
+      Animated.timing(chatbotScale, {
+        toValue: 0.9,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(chatbotScale, {
+        toValue: 1,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+    ]).start();
+
+    // NAVIGATION VERS L'ÉCRAN CHATBOT
+    navigation.navigate('Chatbot');
+  };
 
   return (
     <View style={styles.background}>
@@ -364,6 +407,33 @@ function HomeScreen() {
           </Animated.View>
         </View>
       </ScrollView>
+
+      {/* Bouton Chatbot Flottant - OPTIONNEL si vous voulez garder le bouton flottant */}
+      <Animated.View
+        style={[
+          styles.chatbotButton,
+          {
+            opacity: fadeAnim,
+            transform: [
+              { translateY: chatbotFloat },
+              { scale: chatbotScale }
+            ],
+          },
+        ]}
+      >
+        <TouchableOpacity
+          style={styles.chatbotTouchable}
+          onPress={handleChatbotPress}
+          activeOpacity={0.8}
+        >
+          <View style={styles.chatbotIconContainer}>
+            <Ionicons name="chatbubble-ellipses" size={28} color="#fff" />
+          </View>
+          <View style={styles.chatbotBadge}>
+            <Text style={styles.chatbotBadgeText}>AI</Text>
+          </View>
+        </TouchableOpacity>
+      </Animated.View>
     </View>
   );
 }
@@ -382,6 +452,8 @@ export default function TabNavigator() {
             iconName = focused ? 'search' : 'search-outline';
           } else if (route.name === 'Artisans') {
             iconName = focused ? 'people' : 'people-outline';
+          } else if (route.name === 'Chatbot') { // CORRECTION - Chatbot avant Profil
+            iconName = focused ? 'chatbubble-ellipses' : 'chatbubble-ellipses-outline';
           } else if (route.name === 'Profil') {
             iconName = focused ? 'person' : 'person-outline';
           }
@@ -403,65 +475,74 @@ export default function TabNavigator() {
             </Animated.View>
           );
         },
-        tabBarActiveTintColor: '#FFD700', // Couleur active : doré
-        tabBarInactiveTintColor: 'vert', // Couleur inactive : bleu doux
+        tabBarActiveTintColor: '#FFD700',
+        tabBarInactiveTintColor: '#7F8C8D', // CORRECTION - couleur corrigée
         tabBarStyle: {
-          backgroundColor: '#1A3C34', // Fond principal : vert profond
-          borderTopWidth: 0, // Supprimer la bordure supérieure
-          elevation: 10, // Ombre plus prononcée sur Android
-          shadowColor: '#000', // Ombre pour iOS
+          backgroundColor: '#1A3C34',
+          borderTopWidth: 0,
+          elevation: 10,
+          shadowColor: '#000',
           shadowOffset: { width: 0, height: -4 },
           shadowOpacity: 0.2,
           shadowRadius: 8,
-          paddingVertical: 5, // Espacement vertical pour plus d'espace
+          paddingVertical: 5,
+          height: 70, // AJOUT - hauteur fixe pour une meilleure répartition
         },
         tabBarBackground: () => (
-          // Créer un dégradé pour le fond (simulé avec une superposition de couleurs)
           <View
             style={{
-              backgroundColor: 'white',
+              backgroundColor: '#1A3C34', // CORRECTION - couleur cohérente
               height: '100%',
               borderTopWidth: 0,
-              borderTopColor: '#2D5A4E', // Légère transition de couleur
+              borderTopColor: '#2D5A4E',
             }}
           />
         ),
         tabBarIconStyle: {
-          marginVertical: 1, // Espacement pour les icônes
+          marginVertical: 5, // CORRECTION - margin réduite
         },
         tabBarLabelStyle: {
-          fontSize: 12, // Taille de la police des labels
+          fontSize: 12, // CORRECTION - taille réduite pour plus d'espace
           fontWeight: '600',
           marginBottom: 5,
         },
         headerStyle: {
-          backgroundColor: '#1A3C34', // Changement de la couleur du header pour correspondre au thème
+          backgroundColor: '#1A3C34',
         },
         headerTintColor: '#fff',
       })}
     >
-  
-  <Tab.Screen
-    name="Accueil"
-    component={HomeScreen}
-    options={{ headerShown: false }}
-  />
-  <Tab.Screen
-    name="Recherche"
-    component={search}
-    options={{ tabBarLabel: 'Recherche', headerShown: false }} // Ajout du label
-  />
-  <Tab.Screen
-    name="Artisans"
-    component={Artisans}
-    options={{ tabBarLabel: 'Artisans', headerShown: false }} // Ajout du label
-  />
-  <Tab.Screen
-    name="Profil"
-    component={Profil}
-    options={{ tabBarLabel: 'Profil', headerShown: false }} // Ajout du label
-  />
-</Tab.Navigator>
+      <Tab.Screen
+        name="Accueil"
+        component={HomeScreen}
+        options={{ headerShown: false }}
+      />
+      <Tab.Screen
+        name="Recherche"
+        component={search}
+        options={{ tabBarLabel: 'Recherche', headerShown: false }}
+      />
+      <Tab.Screen
+        name="Artisans"
+        component={Artisans}
+        options={{ tabBarLabel: 'Artisans', headerShown: false }}
+      />
+      {/* CORRECTION - L'onglet Chatbot est maintenant visible */}
+      <Tab.Screen
+        name="Chatbot"
+        component={Chatbot}
+        options={{ 
+          tabBarLabel: 'Assistant',
+          headerShown: false
+          // SUPPRESSION de tabBarButton: () => null pour rendre l'onglet visible
+        }}
+      />
+      <Tab.Screen
+        name="Profil"
+        component={Profil}
+        options={{ tabBarLabel: 'Profil', headerShown: false }}
+      />
+    </Tab.Navigator>
   );
 }
 
@@ -469,10 +550,10 @@ export default function TabNavigator() {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    backgroundColor: '#F4F7FA', // Fond plus doux et moderne
+    backgroundColor: '#F4F7FA',
   },
   scrollContainer: {
-    paddingBottom: 60,
+    paddingBottom: 100, // Espace pour le bouton flottant si conservé
   },
   container: {
     flex: 1,
@@ -486,7 +567,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 10,
     marginBottom: 20,
-    paddingVertical: 15,
+    paddingVertical: 5,
     backgroundColor: '#FFFFFF',
     borderRadius: 20,
     shadowColor: '#000',
@@ -505,12 +586,12 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: '#1A3C34', // Couleur verte foncée pour un look naturel
+    backgroundColor: '#1A3C34',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
     borderWidth: 3,
-    borderColor: '#FFD700', // Bordure dorée
+    borderColor: '#FFD700',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.3,
@@ -743,19 +824,68 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#D97706', // Couleur ambre vibrante
+    backgroundColor: '#D97706',
     borderWidth: 2,
     borderColor: '#FFD700',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.2,
     shadowRadius: 8,
-    elevation: 6,
+    elevation: 5,
   },
   ctaText: {
     fontSize: 18,
     fontWeight: '700',
     color: '#fff',
     marginRight: 10,
+    textShadowColor: 'rgba(0, 0, 0, 0.2)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
+  },
+  chatbotButton: {
+    position: 'absolute',
+    bottom: 30,
+    right: 20,
+    zIndex: 1000,
+  },
+  chatbotTouchable: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    backgroundColor: '#1A3C34',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  chatbotIconContainer: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: '#1A3C34',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#FFD700',
+  },
+  chatbotBadge: {
+    position: 'absolute',
+    top: -5,
+    right: -5,
+    backgroundColor: '#D97706',
+    borderRadius: 10,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderWidth: 1,
+    borderColor: '#FFD700',
+  },
+  chatbotBadgeText: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: '#fff',
+    textTransform: 'uppercase',
   },
 });
