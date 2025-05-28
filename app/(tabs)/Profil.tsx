@@ -19,25 +19,26 @@ import Animated, {
 import { BlurView } from 'expo-blur';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-// Palette de couleurs sophistiquée - nuances or et luxe
+// Palette de couleurs sophistiquée - nuances vertes et nature
 const AppColors = {
-  primary: '#D4AF37', // Or noble
-  primaryLight: '#F5EFD6', // Or pâle
-  primaryDark: '#A98307', // Or foncé
+  primary: '#2E7D32', // Vert profond
+  primaryLight: '#E8F5E8', // Vert très pâle
+  primaryDark: '#1B5E20', // Vert très foncé
   secondary: '#1E1E24', // Noir élégant
-  accent: '#E6C55C', // Accents or clair
+  accent: '#4CAF50', // Vert éclatant
+  accentLight: '#81C784', // Vert clair
   white: '#FFFFFF',
   offWhite: '#F9F9F9',
   lightGray: '#F2F2F2',
   mediumGray: '#81818A',
   darkText: '#212121',
   gradient: {
-    primary: ['#F2E3AA', '#D4AF37', '#A98307'],
+    primary: ['#A5D6A7', '#4CAF50', '#2E7D32'],
     secondary: ['#2E2E36', '#1E1E24'],
-    accent: ['#F7EAB5', '#E6C55C']
+    accent: ['#C8E6C9', '#81C784']
   },
   success: '#4CAF50',
-  statusActive: '#58B369'
+  statusActive: '#66BB6A'
 };
 
 // Polices élégantes
@@ -424,15 +425,6 @@ export default function Profile() {
               <Text style={styles.defaultText}>Principal</Text>
             </View>
           </View>
-          
-          <TouchableOpacity 
-            style={styles.addPaymentButton}
-            onPress={() => router.push('/add-payment-method')}
-            activeOpacity={0.7}
-          >
-            <Feather name="plus" size={18} color={AppColors.primary} />
-            <Text style={styles.addPaymentText}>Ajouter un moyen de paiement</Text>
-          </TouchableOpacity>
         </Animated.View>
         
         {/* Menu Items */}
@@ -576,9 +568,9 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 24,
     borderBottomRightRadius: 24,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(212, 175, 55, 0.3)',
+    borderBottomColor: 'rgba(76, 175, 80, 0.3)',
     elevation: 8,
-    shadowColor: 'rgba(212, 175, 55, 0.5)',
+    shadowColor: 'rgba(76, 175, 80, 0.5)',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 8,
@@ -593,7 +585,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(212, 175, 55, 0.2)',
+    borderBottomColor: 'rgba(76, 175, 80, 0.2)',
   },
   blurHeaderTitle: {
     fontSize: 17,
@@ -712,7 +704,7 @@ const styles = StyleSheet.create({
   userStatusContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(88, 179, 105, 0.15)',
+    backgroundColor: 'rgba(102, 187, 106, 0.15)',
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 10,
@@ -750,13 +742,13 @@ const styles = StyleSheet.create({
     width: width * 0.85,
     justifyContent: 'space-around',
     alignItems: 'center',
-    shadowColor: 'rgba(212, 175, 55, 0.4)',
+    shadowColor: 'rgba(76, 175, 80, 0.4)',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 8,
     elevation: 5,
     borderWidth: 1,
-    borderColor: 'rgba(212, 175, 55, 0.1)',
+    borderColor: 'rgba(76, 175, 80, 0.1)',
   },
   statItem: {
     alignItems: 'center',
@@ -776,7 +768,7 @@ const styles = StyleSheet.create({
   statDivider: {
     height: 24,
     width: 1,
-    backgroundColor: 'rgba(212, 175, 55, 0.15)',
+    backgroundColor: 'rgba(76, 175, 80, 0.15)',
   },
   pointsRow: {
     flexDirection: 'row',
@@ -792,13 +784,13 @@ const styles = StyleSheet.create({
     padding: 18,
     marginHorizontal: 16,
     marginBottom: 16,
-    shadowColor: 'rgba(212, 175, 55, 0.4)',
+    shadowColor: 'rgba(76, 175, 80, 0.4)',
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.15,
     shadowRadius: 12,
     elevation: 6,
     borderWidth: 1,
-    borderColor: 'rgba(212, 175, 55, 0.1)',
+    borderColor: 'rgba(76, 175, 80, 0.1)',
   },
   sectionTitle: {
     flexDirection: 'row',
@@ -824,10 +816,10 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: 12,
   },
-  sectionEditText: {
+   sectionEditText: {
     fontSize: 14,
     fontFamily: Fonts.medium,
-    color: AppColors.primary,
+    color: AppColors.accent,
   },
   infoRow: {
     flexDirection: 'row',
@@ -836,104 +828,92 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   infoLabel: {
-    fontSize: 15,
+    fontSize: 14,
     fontFamily: Fonts.regular,
     color: AppColors.mediumGray,
     flex: 1,
   },
   infoValue: {
-    fontSize: 15,
+    fontSize: 14,
     fontFamily: Fonts.medium,
     color: AppColors.darkText,
-    flex: 1,
+    flex: 2,
     textAlign: 'right',
+  },
+  divider: {
+    height: 1,
+    backgroundColor: 'rgba(76, 175, 80, 0.1)',
+    marginVertical: 8,
   },
   languageContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'flex-end',
+    flex: 2,
   },
   flagIcon: {
     width: 20,
     height: 14,
     marginRight: 6,
   },
-  divider: {
-    height: 1,
-    backgroundColor: 'rgba(212, 175, 55, 0.1)',
-    marginVertical: 6,
-  },
   paymentMethodCard: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: AppColors.offWhite,
-    borderRadius: 14,
+    backgroundColor: AppColors.lightGray,
+    borderRadius: 12,
     padding: 12,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(212, 175, 55, 0.1)',
+    marginTop: 8,
   },
   cardTypeContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    flex: 1,
   },
   cardDetails: {
     marginLeft: 12,
   },
   cardTitle: {
-    fontSize: 15,
+    fontSize: 14,
     fontFamily: Fonts.medium,
     color: AppColors.darkText,
   },
   cardExpiry: {
-    fontSize: 13,
+    fontSize: 12,
     fontFamily: Fonts.regular,
     color: AppColors.mediumGray,
-    marginTop: 4,
+    marginTop: 2,
   },
   defaultBadge: {
-    backgroundColor: 'rgba(212, 175, 55, 0.15)',
-    borderRadius: 10,
-    paddingHorizontal: 8,
+    backgroundColor: AppColors.success,
+    paddingHorizontal: 10,
     paddingVertical: 4,
+    borderRadius: 10,
   },
   defaultText: {
     fontSize: 12,
     fontFamily: Fonts.medium,
-    color: AppColors.primary,
-  },
-  addPaymentButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    borderRadius: 12,
-    backgroundColor: 'rgba(212, 175, 55, 0.05)',
-  },
-  addPaymentText: {
-    fontSize: 14,
-    fontFamily: Fonts.medium,
-    color: AppColors.primary,
-    marginLeft: 8,
+    color: AppColors.white,
   },
   menuCard: {
     backgroundColor: AppColors.white,
     borderRadius: 20,
+    padding: 12,
     marginHorizontal: 16,
     marginBottom: 16,
-    shadowColor: 'rgba(212, 175, 55, 0.4)',
+    shadowColor: 'rgba(76, 175, 80, 0.4)',
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.15,
     shadowRadius: 12,
     elevation: 6,
     borderWidth: 1,
-    borderColor: 'rgba(212, 175, 55, 0.1)',
+    borderColor: 'rgba(76, 175, 80, 0.1)',
   },
   menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 14,
-    paddingHorizontal: 18,
+    paddingHorizontal: 8,
   },
   menuIconContainer: {
     width: 36,
@@ -941,27 +921,26 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 12,
   },
   menuText: {
     fontSize: 15,
     fontFamily: Fonts.medium,
     color: AppColors.darkText,
     flex: 1,
+    marginLeft: 12,
   },
   menuDivider: {
     height: 1,
-    backgroundColor: 'rgba(212, 175, 55, 0.1)',
-    marginLeft: 66,
+    backgroundColor: 'rgba(76, 175, 80, 0.1)',
+    marginHorizontal: 8,
   },
   wishlistBadge: {
-    backgroundColor: '#FF3B30',
+    backgroundColor: AppColors.accent,
     width: 20,
     height: 20,
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 10,
   },
   wishlistBadgeText: {
     fontSize: 11,
@@ -970,8 +949,9 @@ const styles = StyleSheet.create({
   },
   logoutButton: {
     marginHorizontal: 16,
-    marginBottom: 16,
-    borderRadius: 14,
+    marginTop: 8,
+    marginBottom: 24,
+    borderRadius: 16,
     overflow: 'hidden',
   },
   logoutButtonGradient: {
@@ -979,16 +959,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 14,
+    paddingHorizontal: 20,
   },
   logoutText: {
-    fontSize: 15,
-    fontFamily: Fonts.medium,
+    fontSize: 16,
+    fontFamily: Fonts.semiBold,
     color: AppColors.white,
     marginLeft: 8,
   },
   version: {
     alignItems: 'center',
-    marginVertical: 20,
+    marginTop: 12,
+    marginBottom: 20,
   },
   versionText: {
     fontSize: 12,
@@ -996,3 +978,5 @@ const styles = StyleSheet.create({
     color: AppColors.mediumGray,
   },
 });
+
+export default Profile;
